@@ -18,7 +18,8 @@ import {
   Mesh,
   Animation,
   PlayAnimationAction,
-  Angle
+  Angle,
+  SixDofDragBehavior //ovladani pohybu ve VR
 } from "@babylonjs/core";
 import "@babylonjs/inspector";
 
@@ -66,13 +67,16 @@ for (var i = 0; i < n + 1; i++) {
 }
 //vykreslení křivky
 var track = MeshBuilder.CreateLines("track", { points });
-var freza = MeshBuilder.CreateCylinder("freza", { diameter: 0.000001 });
+var windmill = MeshBuilder.CreateCylinder("windmill", { diameter: 0.000001 });
+var DoFdrag = new SixDofDragBehavior();
+windmill.addBehavior(DoFdrag);
+
 SceneLoader.ImportMesh("", "public/", "Windmill.glb", scene, function (
   noveModely
 ) {
-  freza = noveModely[0];
-  freza.scaling = new Vector3(10.15, 10.15, 10.25);
-  freza.position.y = 0;
+  windmill = noveModely[0];
+  windmill.scaling = new Vector3(10.15, 10.15, 10.25);
+  windmill.position.y = 0;
   //  freza.rotate(new Vector3(1, 0, 0), Math.PI / 2);
   //  freza.rotate(new Vector3(0, 1, 0), 0.1);
 });
@@ -84,8 +88,8 @@ SceneLoader.ImportMesh("", "public/", "Windmill.glb", scene, function (
 //animace
 var i = 0;
 scene.registerAfterRender(function () {
-  freza.position.x = points[i].x;
-  freza.position.z = points[i].z;
+  windmill.position.x = points[i].x;
+  windmill.position.z = points[i].z;
   //theta = Math.acos(Vector3.Dot(normals[0], normals[i + 1]));
   //console.log(theta);
   //var sklopeni = Vector3.Cross(normals[i], normals[i + 1]).y;
